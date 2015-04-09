@@ -21,14 +21,11 @@ namespace Sherpa
             init(); 
         }
 
-        public bool pushExcelToDatabase(string excelfilepath)
-        {     
+        public bool appendExcelToDatabase(string excelfilepath)
+        {
             try
             {
                 string excelConnectionString = getOleDbConnectionString(excelfilepath);
-               
-                //execute a query to erase any previous data from our destination table
-                //clearSqlTable(sqlTable, sqlConnectionString);
 
                 //series of commands to bulk copy data from the excel file into our sql table
                 OleDbConnection oledbconn = new OleDbConnection(excelConnectionString);
@@ -38,9 +35,9 @@ namespace Sherpa
 
                 //use bulk copy to write the data to the database
                 SqlBulkCopy bulkcopy = new SqlBulkCopy(sqlConnectionString);
-                bulkcopy.DestinationTableName = sqlTable;               
+                bulkcopy.DestinationTableName = sqlTable;
                 bulkcopy.WriteToServer(dr);
-                
+
                 oledbconn.Close();
 
                 return true;
@@ -48,19 +45,8 @@ namespace Sherpa
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                //handle exception
                 return false;
             }
-        }
-
-        private void clearSqlTable(string sqlTable, string sqlConnectionString)
-        {
-            string clearSql = "delete from " + sqlTable;
-            SqlConnection sqlConn = new SqlConnection(sqlConnectionString);
-            SqlCommand sqlCmd = new SqlCommand(clearSql, sqlConn);
-            sqlConn.Open();
-            sqlCmd.ExecuteNonQuery();
-            sqlConn.Close();
         }
 
         protected string getOleDbConnectionString(string filepath)
@@ -91,3 +77,13 @@ namespace Sherpa
         }
     }
 }
+
+//private void clearSqlTable(string sqlTable, string sqlConnectionString)
+//{
+//    string clearSql = "delete from " + sqlTable;
+//    SqlConnection sqlConn = new SqlConnection(sqlConnectionString);
+//    SqlCommand sqlCmd = new SqlCommand(clearSql, sqlConn);
+//    sqlConn.Open();
+//    sqlCmd.ExecuteNonQuery();
+//    sqlConn.Close();
+//}

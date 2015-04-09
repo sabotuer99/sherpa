@@ -57,7 +57,7 @@ namespace Sherpa
 
         private void loadExcelIntoDb(string file)
         {
-            if(new DbService().pushExcelToDatabase(file))
+            if(new DbService().appendExcelToDatabase(file))
             {
                 statusLabel.ForeColor = Color.Green;
                 statusLabel.Text = "Successful upload!";
